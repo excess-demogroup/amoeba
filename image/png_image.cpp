@@ -26,7 +26,6 @@ PNGImage::PNGImage(File *file)
 	png_infop info_ptr;
 	int bit_depth, color_type, interlace_type;
 //	png_color_16 my_background, *image_background;
-	png_info intent;
 	png_bytep *row_pointers;
 	unsigned int row;
 
