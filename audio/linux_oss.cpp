@@ -17,14 +17,15 @@
 #include <sys/ioctl.h>
 #include <errno.h>
 #include <sys/time.h>
+#include <endian.h>
 
 OSSAudioDriver::OSSAudioDriver(AudioProvider *prv, float jump, MainLoop *lp)
 {
 	this->prov = prv;
 
-	this->oss_fd = open("/dev/sound/dsp", O_RDWR);
+	this->oss_fd = open("/dev/sound/dsp", O_WRONLY);
 	if (this->oss_fd == -1) {
-	        this->oss_fd = open("/dev/dsp", O_RDWR);
+	        this->oss_fd = open("/dev/dsp", O_WRONLY);
 	        if (this->oss_fd == -1)
 	                throw new FatalException("/dev/dsp", strerror(errno));
 	}
@@ -32,7 +33,7 @@ OSSAudioDriver::OSSAudioDriver(AudioProvider *prv, float jump, MainLoop *lp)
 	this->set_ioctl(SNDCTL_DSP_RESET, 1);
 	this->set_ioctl(SOUND_PCM_WRITE_RATE, 44100);
 	this->set_ioctl(SOUND_PCM_WRITE_CHANNELS, 2);
-	this->set_ioctl(SNDCTL_DSP_SETFMT, AFMT_S16_LE);
+	this->set_ioctl(SNDCTL_DSP_SETFMT, AFMT_S16_NE);
 	this->set_ioctl(SNDCTL_DSP_NONBLOCK, 1);
 	this->set_ioctl(SNDCTL_DSP_SETFRAGMENT, 0x7fff000c);
 	

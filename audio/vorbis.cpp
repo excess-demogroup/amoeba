@@ -74,7 +74,11 @@ OggVorbisAudioProvider::~OggVorbisAudioProvider()
 int OggVorbisAudioProvider::fill_buf(char *buf, int bytes)
 {
 	int junk, ret;
+#if __BYTE_ORDER == __LITTLE_ENDIAN
 	ret = ov_read(this->vf, buf, bytes, 0, 2, 1, &junk);
+#else
+	ret = ov_read(this->vf, buf, bytes, 1, 2, 1, &junk);
+#endif
 
 	if (ret < 0)
 		throw new FatalException("Ogg Vorbis stream error!");
