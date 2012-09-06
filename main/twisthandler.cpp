@@ -335,13 +335,7 @@ void TwistHandler::draw_scene(float progress)
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		glDisableClientState(GL_NORMAL_ARRAY);
 	
-		if (this->has_compiled_vertex_array)
-			(*this->glLockArraysEXT)(0, this->vertices.num_elems() * 4);
-		
 		glDrawArrays(GL_QUADS, 0, this->vertices.num_elems() * 4);
-		
-		if (this->has_compiled_vertex_array)
-			(*this->glUnlockArraysEXT)();
 	
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
