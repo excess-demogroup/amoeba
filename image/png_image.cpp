@@ -14,7 +14,7 @@
 
 /* ugly, but works (unless there is corrupted data :-D) */
 char *curr_png_ptr = NULL;
-void read_mem(png_structp png_ptr, png_bytep data, unsigned int length)
+void read_mem(png_structp png_ptr, png_bytep data, png_size_t length)
 {
 	memcpy(data, curr_png_ptr, length);
 	curr_png_ptr += length;
@@ -53,10 +53,14 @@ PNGImage::PNGImage(File *file)
 	curr_png_ptr = file->get_data();
 	png_set_read_fn(png_ptr, NULL, read_mem);
 
+	png_uint_32 width, height;
 	png_read_info(png_ptr, info_ptr);
 	png_get_IHDR(png_ptr, info_ptr,
-		(png_uint_32 *)(&this->width), (png_uint_32 *)(&this->height),
+		&width, &height,
 		&bit_depth, &color_type, &interlace_type, NULL, NULL);
+
+	this->width = width;
+	this->height = height;
 
 	if (color_type == PNG_COLOR_TYPE_GRAY) {
 		this->bpp = 8;
