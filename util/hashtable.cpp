@@ -37,11 +37,12 @@ unsigned int Hashtable::string_hash(const char *str)
         return hash;
 }
 
-Hashtable::Hashtable()
+Hashtable::Hashtable(bool curves)
 {
 	for (int i = 0; i < NUM_BUCKETS; i++) {
 		this->buckets[i] = NULL;
 	}
+	this->curves = curves;
 }
 
 /* all the linked lists will be in reverse order ;-) */
@@ -63,6 +64,7 @@ Hashtable::Hashtable(Hashtable *h)
 			ptr = ptr->next;
 		}
 	}
+	this->curves = h->curves;
 }
 
 Hashtable::~Hashtable()
@@ -206,7 +208,11 @@ void Hashtable::destroy_values()
 	for (int i = 0; i < NUM_BUCKETS; i++) {
 		struct linked_list *ptr = buckets[i];
 		while (ptr) {
-			free(ptr->obj);
+			// bit of an ugly hack
+			if (curves)
+				delete (Curve *)(ptr->obj);
+			else
+				free(ptr->obj);
 			ptr->obj = NULL;
 			ptr = ptr->next;
 		}

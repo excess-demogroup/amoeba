@@ -49,7 +49,7 @@ Event::Event(MainLoop *ml, const char *title, const char *elem, Hashtable *attr,
 		throw new FatalException(elem, "No curve type specified.");
 	}
 
-	this->curves = new Hashtable();
+	this->curves = new Hashtable(true);
 
 	/* now create a set of attribute curves */
 	char *cn = strdup(curvenames);

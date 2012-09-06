@@ -21,9 +21,10 @@ protected:
 		struct linked_list *next;
 	};
 	linked_list *buckets[NUM_BUCKETS];
+	bool curves; 
 
 public:
-	Hashtable();
+	Hashtable(bool curves = false);
 	Hashtable(Hashtable *h);
 	~Hashtable();
 
