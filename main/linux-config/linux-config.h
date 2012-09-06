@@ -14,7 +14,7 @@ public:
 	
 private:
 	GdkPixmap* (*_gdk_pixmap_new)(GdkWindow*, gint, gint, gint);
-	void (*_gdk_pixmap_unref)(GdkPixmap*);
+	void (*_gdk_drawable_unref)(GdkPixmap*);
 	GdkGC* (*_gdk_gc_new)(GdkDrawable*);
 	void (*_gdk_gc_unref)(GdkGC*);
 	void (*_gdk_rgb_init)(void);
@@ -29,8 +29,9 @@ private:
 	GtkWidget* (*_gtk_label_new)(const gchar*);
 	void (*_gtk_label_set_justify)(GtkLabel*, GtkJustification);
 	gint (*_gtk_main_iteration_do)(gboolean);
+	gboolean (*_gtk_events_pending)(void);
 	void (*_gtk_main_quit)(void);
-	void (*_gtk_menu_append)(GtkMenu*, GtkWidget*);
+	void (*_gtk_menu_shell_append)(GtkMenu*, GtkWidget*);
 	GtkWidget* (*_gtk_menu_get_active)(GtkMenu*);
 	GtkWidget* (*_gtk_menu_item_new_with_label)(const gchar*);
 	GtkWidget* (*_gtk_menu_new)(void);
@@ -42,8 +43,8 @@ private:
 	void (*_gtk_option_menu_set_history)(GtkOptionMenu*, guint);
 	void (*_gtk_option_menu_set_menu)(GtkOptionMenu*, GtkWidget*);
 	GtkWidget* (*_gtk_pixmap_new)(GdkPixmap*, GdkBitmap*);
-	guint (*_gtk_signal_connect)(GtkObject*, const gchar*, GtkSignalFunc, gpointer);
-	void (*_gtk_signal_disconnect)(GtkObject*, guint);
+	guint (*_gtk_signal_connect_full)(GtkObject*, const gchar*, GtkSignalFunc, GtkCallbackMarshal, gpointer, GtkDestroyNotify, gint, gint);
+	void (*_g_signal_handler_disconnect)(GtkObject*, guint);
 	void (*_gtk_table_attach)(GtkTable*, GtkWidget*, guint, guint, guint, guint, GtkAttachOptions, GtkAttachOptions, guint, guint);
 	GtkWidget* (*_gtk_table_new)(guint, guint, gboolean);
 	void (*_gtk_table_set_col_spacings)(GtkTable*, guint);
@@ -62,7 +63,6 @@ private:
 
 	void (*_gtk_init)(int*, char ***);
 	void (*_gtk_main)(void);
-	void (*_gtk_set_locale)(void);
 	void (*_gtk_exit)(gint);
 };
 #endif /* !defined(_LINUX_CONFIG_H) */

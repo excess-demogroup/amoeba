@@ -15,7 +15,9 @@
  * FIXME: Should we support command line options even with GTK+?
  */
 
-#define GTK_NO_CHECK_CASTS
+#ifndef G_DISABLE_CAST_CHECKS
+#define G_DISABLE_CAST_CHECKS
+#endif
 
 #include <stdio.h>
 #include <string.h>
@@ -52,13 +54,13 @@ int modeline_compare(const void *a, const void *b)
 
 LinuxConfig::LinuxConfig()
 {
-	void *gdkh = dlopen("libgdk-1.2.so.0", RTLD_GLOBAL | RTLD_NOW);
+	void *gdkh = dlopen("libgdk-x11-2.0.so.0", RTLD_GLOBAL | RTLD_NOW);
 	if (gdkh == NULL)
-		throw new NonFatalException("libgdk-1.2.so.0", strerror(errno));
+		throw new NonFatalException("libgdk-x11-2.0.so.0", strerror(errno));
 	
-	void *gtkh = dlopen("libgtk-1.2.so.0", RTLD_NOW);
+	void *gtkh = dlopen("libgtk-x11-2.0.so.0", RTLD_NOW);
 	if (gtkh == NULL)
-		throw new NonFatalException("libgtk-1.2.so.0", strerror(errno));
+		throw new NonFatalException("libgtk-x11-2.0.so.0", strerror(errno));
 
 	/* now we go through and load all the symbols we need, error-checking as we go */
 #define LOAD_SYMBOL(lib, x, cast) { \
@@ -66,7 +68,7 @@ LinuxConfig::LinuxConfig()
 	if (this->_ ## x == NULL) throw new NonFatalException(#x, strerror(errno)); \
 }
 	LOAD_SYMBOL(gdk, gdk_pixmap_new, GdkPixmap* (*)(GdkWindow*, gint, gint, gint));
-	LOAD_SYMBOL(gdk, gdk_pixmap_unref, void (*)(GdkPixmap*));
+	LOAD_SYMBOL(gdk, gdk_drawable_unref, void (*)(GdkPixmap*));
 	LOAD_SYMBOL(gdk, gdk_gc_new, GdkGC* (*)(GdkDrawable*));
 	LOAD_SYMBOL(gdk, gdk_gc_unref, void (*)(GdkGC*));
 	LOAD_SYMBOL(gdk, gdk_rgb_init, void (*)(void));
@@ -83,8 +85,9 @@ LinuxConfig::LinuxConfig()
 	LOAD_SYMBOL(gtk, gtk_label_new, GtkWidget* (*)(const gchar*));
 	LOAD_SYMBOL(gtk, gtk_label_set_justify, void (*)(GtkLabel*, GtkJustification));
 	LOAD_SYMBOL(gtk, gtk_main_iteration_do, int (*)(gboolean));
+	LOAD_SYMBOL(gtk, gtk_events_pending, gboolean (*)(void));
 	LOAD_SYMBOL(gtk, gtk_main_quit, void (*)(void));
-	LOAD_SYMBOL(gtk, gtk_menu_append, void (*)(GtkMenu*, GtkWidget*));
+	LOAD_SYMBOL(gtk, gtk_menu_shell_append, void (*)(GtkMenu*, GtkWidget*));
 	LOAD_SYMBOL(gtk, gtk_menu_get_active, GtkWidget* (*)(GtkMenu*));
 	LOAD_SYMBOL(gtk, gtk_menu_item_new_with_label, GtkWidget* (*)(const gchar*));
 	LOAD_SYMBOL(gtk, gtk_menu_new, GtkWidget* (*)(void));
@@ -96,8 +99,8 @@ LinuxConfig::LinuxConfig()
 	LOAD_SYMBOL(gtk, gtk_option_menu_set_history, void (*)(GtkOptionMenu*, guint));
 	LOAD_SYMBOL(gtk, gtk_option_menu_set_menu, void (*)(GtkOptionMenu*, GtkWidget*));
 	LOAD_SYMBOL(gtk, gtk_pixmap_new, GtkWidget* (*)(GdkPixmap*, GdkPixmap*));
-	LOAD_SYMBOL(gtk, gtk_signal_connect, guint (*)(GtkObject*, const gchar*, GtkSignalFunc, gpointer));
-	LOAD_SYMBOL(gtk, gtk_signal_disconnect, void (*)(GtkObject*, guint));
+	LOAD_SYMBOL(gtk, gtk_signal_connect_full, guint(*)(GtkObject*, const gchar*, GtkSignalFunc, GtkCallbackMarshal, gpointer, GtkDestroyNotify, gint, gint));
+	LOAD_SYMBOL(gtk, g_signal_handler_disconnect, void (*)(GtkObject*, guint));
 	LOAD_SYMBOL(gtk, gtk_table_attach, void (*)(GtkTable*, GtkWidget*, guint, guint, guint, guint, GtkAttachOptions, GtkAttachOptions, guint, guint));
 	LOAD_SYMBOL(gtk, gtk_table_new, GtkWidget* (*)(guint, guint, gboolean));
 	LOAD_SYMBOL(gtk, gtk_table_set_col_spacings, void (*)(GtkTable*, guint));
@@ -116,7 +119,6 @@ LinuxConfig::LinuxConfig()
 
 	LOAD_SYMBOL(gtk, gtk_init, void (*)(int*, char ***));
 	LOAD_SYMBOL(gtk, gtk_main, void (*)(void));
-	LOAD_SYMBOL(gtk, gtk_set_locale, void (*)(void));
 }
 
 /* this is largely GLADE-generated code, but modified for the dl */
@@ -132,7 +134,6 @@ void LinuxConfig::show(int *argc, char ***argv, Hashtable *attr_hash)
 		throw new FatalException("Can't connect to X server!");
 	int screen = DefaultScreen(dpy);
 	
-	(*_gtk_set_locale) ();
 	(*_gtk_init) (argc, argv);
 
 	GtkWidget *config;
@@ -164,7 +165,7 @@ void LinuxConfig::show(int *argc, char ***argv, Hashtable *attr_hash)
 	unsigned char *ptr;
 	GdkGC *gc;
 	
-	config = (*_gtk_window_new) (GTK_WINDOW_DIALOG);
+	config = (*_gtk_window_new) (GTK_WINDOW_TOPLEVEL);
 	(*_gtk_object_set_data) (GTK_OBJECT (config), "config", config);
 	(*_gtk_window_set_title) (GTK_WINDOW (config), "Excess demo configuration (GLX/X11)");
 	(*_gtk_window_set_position) (GTK_WINDOW (config), GTK_WIN_POS_CENTER);
@@ -212,7 +213,7 @@ void LinuxConfig::show(int *argc, char ***argv, Hashtable *attr_hash)
 	
 	pixmap1 = (*_gtk_pixmap_new) (gdkpixmap, NULL);
 	(*_gdk_gc_unref) (gc);
-	(*_gdk_pixmap_unref) (gdkpixmap);
+	(*_gdk_drawable_unref) (gdkpixmap);
 
 	delete logo;
 
@@ -278,7 +279,7 @@ void LinuxConfig::show(int *argc, char ***argv, Hashtable *attr_hash)
 			sprintf(buf, "%ux%u", modes[i]->hdisplay, modes[i]->vdisplay);
 			glade_menuitem = (*_gtk_menu_item_new_with_label) (buf);
 			(*_gtk_widget_show) (glade_menuitem);
-			(*_gtk_menu_append) (GTK_MENU (res_menu_menu), glade_menuitem);
+			(*_gtk_menu_shell_append) (GTK_MENU (res_menu_menu), glade_menuitem);
 
 			sprintf(buf, "%u", modes[i]->hdisplay);
 			(*_gtk_object_set_data) (GTK_OBJECT (glade_menuitem), strdup("xres"),
@@ -311,12 +312,12 @@ void LinuxConfig::show(int *argc, char ***argv, Hashtable *attr_hash)
 	glade_menuitem = (*_gtk_menu_item_new_with_label) ("Fullscreen");
 	(*_gtk_object_set_data) (GTK_OBJECT (glade_menuitem), strdup("fullscreen"), strdup("yes"));
 	(*_gtk_widget_show) (glade_menuitem);
-	(*_gtk_menu_append) (GTK_MENU (fullscreenmenu_menu), glade_menuitem);
+	(*_gtk_menu_shell_append) (GTK_MENU (fullscreenmenu_menu), glade_menuitem);
 	
 	glade_menuitem = (*_gtk_menu_item_new_with_label) ("Windowed");
 	(*_gtk_object_set_data) (GTK_OBJECT (glade_menuitem), strdup("fullscreen"), strdup("no"));
 	(*_gtk_widget_show) (glade_menuitem);
-	(*_gtk_menu_append) (GTK_MENU (fullscreenmenu_menu), glade_menuitem);
+	(*_gtk_menu_shell_append) (GTK_MENU (fullscreenmenu_menu), glade_menuitem);
 	
 	(*_gtk_option_menu_set_menu) (GTK_OPTION_MENU (fullscreenmenu), fullscreenmenu_menu);
 	(*_gtk_option_menu_set_history) (GTK_OPTION_MENU (fullscreenmenu), 0);
@@ -405,7 +406,7 @@ void LinuxConfig::show(int *argc, char ***argv, Hashtable *attr_hash)
 			
 			glade_menuitem = (*_gtk_menu_item_new_with_label) (buf);
 			(*_gtk_widget_show) (glade_menuitem);
-			(*_gtk_menu_append) (GTK_MENU (visualmenu_menu), glade_menuitem);
+			(*_gtk_menu_shell_append) (GTK_MENU (visualmenu_menu), glade_menuitem);
 			sprintf(buf, "%lu", xvi[i].visualid);
 			(*_gtk_object_set_data) (GTK_OBJECT (glade_menuitem), strdup("visual_id"),
 				strdup(buf));
@@ -451,13 +452,13 @@ void LinuxConfig::show(int *argc, char ***argv, Hashtable *attr_hash)
 		glade_menuitem = (*_gtk_menu_item_new_with_label) ("Yes");
 		(*_gtk_object_set_data) (GTK_OBJECT (glade_menuitem), strdup("sound"), strdup("yes"));
 		(*_gtk_widget_show) (glade_menuitem);
-		(*_gtk_menu_append) (GTK_MENU (soundmenu_menu), glade_menuitem);
+		(*_gtk_menu_shell_append) (GTK_MENU (soundmenu_menu), glade_menuitem);
 	}
 	
 	glade_menuitem = (*_gtk_menu_item_new_with_label) ("No");
 	(*_gtk_object_set_data) (GTK_OBJECT (glade_menuitem), strdup("sound"), strdup("no"));
 	(*_gtk_widget_show) (glade_menuitem);
-	(*_gtk_menu_append) (GTK_MENU (soundmenu_menu), glade_menuitem);
+	(*_gtk_menu_shell_append) (GTK_MENU (soundmenu_menu), glade_menuitem);
 	(*_gtk_option_menu_set_menu) (GTK_OPTION_MENU (soundmenu), soundmenu_menu);
 
 	res_label = (*_gtk_label_new) ("Screen resolution:");
@@ -503,12 +504,12 @@ void LinuxConfig::show(int *argc, char ***argv, Hashtable *attr_hash)
 	(*_gtk_widget_ref) (ok);
 	(*_gtk_object_set_data_full) (GTK_OBJECT (config), "ok", ok,
 	                          (GtkDestroyNotify) (*_gtk_widget_unref));
-	(*_gtk_signal_connect) (GTK_OBJECT (ok), "clicked", GTK_SIGNAL_FUNC (*_gtk_main_quit), NULL);
+	(*_gtk_signal_connect_full) (GTK_OBJECT (ok), "clicked", GTK_SIGNAL_FUNC (*_gtk_main_quit), NULL, NULL, NULL, 0, 0);
 
 	(*_gtk_widget_show) (ok);
 	(*_gtk_box_pack_start) (GTK_BOX (hbox4), ok, TRUE, TRUE, 1);
 	
-	int dest_signal = (*_gtk_signal_connect) (GTK_OBJECT (config), "destroy", GTK_SIGNAL_FUNC (*_gtk_exit), NULL);
+	int dest_signal = (*_gtk_signal_connect_full) (GTK_OBJECT (config), "destroy", GTK_SIGNAL_FUNC (*_gtk_exit), NULL, NULL, NULL, 0, 0);
 	(*_gtk_widget_show)(config);
 	
 	(*_gtk_main) ();
@@ -518,19 +519,21 @@ void LinuxConfig::show(int *argc, char ***argv, Hashtable *attr_hash)
 	attr_hash->insert("xres", (*_gtk_object_get_data) (resolution, "xres"));
 	attr_hash->insert("yres", (*_gtk_object_get_data) (resolution, "yres"));
 	
-	GtkObject *fullscreen = GTK_OBJECT ((*_gtk_menu_get_active) (GTK_MENU (fullscreenmenu_menu)));	
+	GtkObject *fullscreen = GTK_OBJECT ((*_gtk_menu_get_active) (GTK_MENU (fullscreenmenu_menu)));
 	attr_hash->insert("fullscreen", (*_gtk_object_get_data) (fullscreen, "fullscreen"));
 
-	GtkObject *visid = GTK_OBJECT ((*_gtk_menu_get_active) (GTK_MENU (visualmenu_menu)));	
+	GtkObject *visid = GTK_OBJECT ((*_gtk_menu_get_active) (GTK_MENU (visualmenu_menu)));
 	attr_hash->insert("visual_id", (*_gtk_object_get_data) (visid, "visual_id"));
 
 	GtkObject *sound = GTK_OBJECT ((*_gtk_menu_get_active) (GTK_MENU (soundmenu_menu)));
 	attr_hash->insert("sound", (*_gtk_object_get_data) (sound, "sound"));
 
-	(*_gtk_signal_disconnect) (GTK_OBJECT (config), dest_signal);
+	(*_g_signal_handler_disconnect) (GTK_OBJECT (config), dest_signal);
 	(*_gtk_widget_hide) (config);
 	(*_gtk_widget_destroy) (config);
-	(*_gtk_main_iteration_do) (false);
+
+	while ((*_gtk_events_pending) ())
+		(*_gtk_main_iteration_do) (false);
 
 	setlocale(LC_ALL, "C");
 }
