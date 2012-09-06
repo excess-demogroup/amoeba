@@ -39,7 +39,7 @@ PakFile::PakFile(char *filename)
 	unsigned int i;
 
 #if __linux__
-	int fd = open("demo.dat", O_RDONLY);
+	int fd = open("/usr/share/amoeba/demo.dat", O_RDONLY);
 #else
 	int fd = open("demo.dat", O_RDONLY | O_BINARY);
 #endif
