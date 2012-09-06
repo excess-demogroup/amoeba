@@ -419,7 +419,7 @@ void LinuxConfig::show(int *argc, char ***argv, Hashtable *attr_hash)
 			usable++;
 		}
 		if (usable == 0)
-			throw new FatalException("No usable visuals!");
+			throw new FatalException("No usable visuals! (Try 32bpp mode if you are not already)");
 		(*_gtk_option_menu_set_menu) (GTK_OPTION_MENU (visualmenu), visualmenu_menu);
 		(*_gtk_option_menu_set_history) (GTK_OPTION_MENU (fullscreenmenu), bestid);
 	}

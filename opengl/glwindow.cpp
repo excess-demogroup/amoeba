@@ -333,7 +333,7 @@ GLWindow::GLWindow(char *title, int width, int height, int bpp, bool fullscreen,
 	XGetGeometry(this->dpy, this->win, &winDummy, &this->x, &this->y,
 		&this->width, &this->height, &borderDummy, &this->bpp);
 	if (!glXIsDirect(this->dpy, this->ctx)) {
-		throw new FatalException("No direct rendering (hardware acceleration) available!");
+		throw new FatalException("No direct rendering (hardware acceleration) available! (Check libGL.so.* symlinks)");
 	}
 
 	nice(-7);
