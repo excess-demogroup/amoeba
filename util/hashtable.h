@@ -29,7 +29,7 @@ public:
 	~Hashtable();
 
 	void insert(const char * const key, void * const obj);
-	void insert(const char * const key, char * const str);
+	void insert(const char * const key, const char * const str);
 	void remove(const char * const key);
 	void *lookup(const char * const key) const;
 	void destroy_values();

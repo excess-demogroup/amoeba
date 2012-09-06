@@ -99,9 +99,9 @@ void Hashtable::insert(const char * const key, void * const obj)
 	this->buckets[partial_hash] = ptr;
 }
 
-void Hashtable::insert(const char * const key, char * const str)
+void Hashtable::insert(const char * const key, const char * const str)
 {
-	this->insert(key, (void * const)str);
+	this->insert(key, (void *)strdup(str));
 }
 
 /* makes no error if it doesn't exist (make it return a bool?) */

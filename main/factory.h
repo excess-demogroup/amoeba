@@ -27,19 +27,19 @@ private:
 	char *elem, *longdesc, *mainparm;
 
 public:
-	HandlerFactory(char *element)
+	HandlerFactory(const char *element)
 	{
 		this->elem = strdup(element);
 		this->longdesc = NULL;
 		this->mainparm = NULL;
 	}
-	HandlerFactory(char *element, char *longdesc)
+	HandlerFactory(const char *element, const char *longdesc)
 	{
 		this->elem = strdup(element);
 		this->longdesc = strdup(longdesc);
 		this->mainparm = NULL;
 	}
-	HandlerFactory(char *element, char *longdesc, char *mainparm)
+	HandlerFactory(const char *element, const char *longdesc, const char *mainparm)
 	{
 		this->elem = strdup(element);
 		this->longdesc = strdup(longdesc);

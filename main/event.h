@@ -11,14 +11,14 @@ class TimewalkHandler;
 
 class Event {
 public:
-	Event(MainLoop *ml, const char *title, const char *elem, Hashtable *attr, char *curvenames);
+	Event(MainLoop *ml, const char *title, const char *elem, Hashtable *attr, const char *curvenames);
 	virtual ~Event();
 	
 	/* these are typically provided by the base class */
 	void add_curvepoint(Hashtable *markers, const char *element, const char **attr);
 	void end_curvedata();
 	
-	float get_val(char *attr_name, float progress);
+	float get_val(const char *attr_name, float progress);
 	
 	/* these are typically overloaded */
 	virtual void start_effect();

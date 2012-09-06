@@ -12,7 +12,7 @@
 
 #if DEMOLIB_MAINLOOP
 
-Event::Event(MainLoop *ml, const char *title, const char *elem, Hashtable *attr, char *curvenames)
+Event::Event(MainLoop *ml, const char *title, const char *elem, Hashtable *attr, const char *curvenames)
 {
 	int curve_type = CURVE_NONE;
 
@@ -158,7 +158,7 @@ void Event::start_effect() {}
 void Event::draw_scene(float progress) {}
 void Event::end_effect() {}
 
-float Event::get_val(char *attr_name, float progress)
+float Event::get_val(const char *attr_name, float progress)
 {
 	if (this->curves == NULL) {
 		throw new FatalException(attr_name, "No curves defined in effect!");
