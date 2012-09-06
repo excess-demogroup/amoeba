@@ -23,6 +23,7 @@
 #include <unistd.h>
 #include <dlfcn.h>
 #include <errno.h>
+#include <locale.h>
 
 #include <GL/glx.h>
 #include <X11/extensions/xf86vmode.h>
@@ -528,4 +529,6 @@ void LinuxConfig::show(int *argc, char ***argv, Hashtable *attr_hash)
 	(*_gtk_widget_hide) (config);
 	(*_gtk_widget_destroy) (config);
 	(*_gtk_main_iteration_do) (false);
+
+	setlocale(LC_ALL, "C");
 }
