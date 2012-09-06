@@ -1,0 +1,16 @@
+DEPS = $(OBJS:.o=.d)
+
+DEPCXX=$(CXX)
+ifeq ($(DESTPLATFORM),linux)
+  ifeq ($(LINUXVARIANT),icc)
+    DEPCXX=g++-3.0
+  endif
+endif
+
+%.d: %.cpp
+	@echo Remaking dependencies for $< \(in $@\)...
+	@$(SHELL) -ec '$(DEPCXX) -MM $(CPPFLAGS) $< \
+		| sed '\''s,\($*\)\.o[ :]*,\1.o $@ : ,g'\'' > $@; \
+		[ -s $@ ] || rm -f $@' # 2>/dev/null
+
+-include $(DEPS)

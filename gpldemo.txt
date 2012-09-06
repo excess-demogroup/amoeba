@@ -1,0 +1,51 @@
+This year's Underscore demo from Excess comes with full source.
+
+The decision to give out the source for our demo engine came quite late in
+the process (that is, the TG demo process -- Amoeba was originally supposed
+to be released at TG, but external circumstances made this impossible,
+unfortunately :-) ). Currently, there appears to be a very positive trend in the
+scene world-wide. This source release is meant as a friendly gesture to that
+movement, and we want to contribute to it by giving new sceners something to
+learn from an look at.
+
+After some thinking, we settled on the GNU General Public License (commonly
+known as the GPL), version 2, for this project. (The full license text can be
+found in the file COPYING -- if you aren't familiar with the GPL, you're
+encouraged to spend half an hour reading it, it's one of the most common
+"open source" licenses today.) In short, that means that you can compile the
+demo, you can look at the code and learn from it, but you _can't_ grab
+source from it and put it into your own closed-sourced demo, for instance --
+if you want to use source directly, the derived work must also be GPL. (Note
+that only the _program_ is GPLed -- the demo data is not.) However, if you
+ask us, we're quite likely to make an exception -- drop us an e-mail if
+you're interested.
+
+This source isn't something we're very proud of. Basically, it's a learning
+project -- personally, I went totally from scratch regarding OpenGL coding to
+what you see today (the others in the group are more experienced scene-wise,
+though) over the period of about a year. As a result, what you see isn't
+always the result of very good design choices or clean code (especially the
+opengl/ directory should go away completely, and main/ contains way too many
+files), but it should nevertheless contain interesting stuff for most
+democoders out there, even though some quite unclean code made its way into
+the release close to deadline :-) (Releasing source can be very humbling ;-) )
+It doesn't contain source for any effects we _didn't_ use in the demo
+(although there aren't that many), our (partly working) GUI demo tool, our
+RTG importer, our (unfinished) softsynth etc..
+
+The prebuilt binaries included are compiled with various versions of gcc
+(MingW crosscompiled from Linux for the Linux binaries), and the engine
+contains only GNU Makefiles (sorry, no autoconf, you will have to tweak the
+Makefiles yourself), but we've also compiled it with MSVC6 on Windows, Intel
+C++ on Linux and MIPSpro on IRIX (IRIX support requires minor changes not
+included, sorry). In other words, the code should be quite portable, even to
+non-Intel platforms. The line endings are in UNIX format -- if your editor
+can't handle it, tough luck. Conversion isn't hard anyhow.
+
+The blob (marching cube) source was originally written by neon of
+nocturnal^bafh (but later modified and optimized by us), and has been
+released together with the other source with his permission.
+
+Have fun with the source. Keep the scene spirit alive!
+	- Sesse, coder, Excess
+

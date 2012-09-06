@@ -1,0 +1,34 @@
+#include <windows.h>
+#include "resource.h"
+
+IDD_CONFIG DIALOG DISCARDABLE  0, 0, 265, 105
+STYLE DS_SETFOREGROUND | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION
+CAPTION "Excess demo configuration (Win32)"
+FONT 8, "MS Sans Serif"
+BEGIN
+    ICON	    0,IDC_STATIC,10,10,20,20
+
+    // logo
+    CONTROL         IDB_LOGO,"Static",SS_BITMAP,3,3,84,99
+    
+    // screen mode
+    LTEXT           "Screen mode:",IDC_STATIC,95,19,53,8
+    COMBOBOX        IDC_SCREENMODE,150,16,110,80,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+
+    // window mode
+    LTEXT           "Window mode:",IDC_STATIC,95,34,53,8
+    COMBOBOX        IDC_WINDOWMODE,150,31,110,80,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    
+    // z buffer
+    LTEXT           "Z-buffer:",IDC_STATIC,95,49,30,8
+    COMBOBOX        IDC_ZBUFFER,150,46,110,80,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+   
+    // sound device
+    LTEXT           "Sound device:",IDC_STATIC,95,64,53,8
+    COMBOBOX        IDC_SOUND,150,61,110,80,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+   
+    DEFPUSHBUTTON   "Ninja!",IDC_OK,123,85,50,15
+    PUSHBUTTON      "Samurai-wuss",IDC_CANCEL,183,85,50,15
+END
+
+0 ICON DISCARDABLE "main/win32-config/excess.ico"
