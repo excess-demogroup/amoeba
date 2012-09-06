@@ -54,17 +54,21 @@ void AutoSplineCurve::end_curvepoints(float start, float length)
 		}
 	}
 
-	const int e = this->num_points - 1;
+	if (this->num_points == 1) {
+		deriv[0] = 0.0f;
+	} else {
+		const int e = this->num_points - 1;
+		
+		/* now find the derivatives */
+		for (i = 1; i < e; i++) {
+			const int p = i - 1, n = i + 1;
+			deriv[i] = (y[n] - y[p]) / (x[n] - x[p]);
+		}
 	
-	/* now find the derivatives */
-	for (i = 1; i < e; i++) {
-		const int p = i - 1, n = i + 1;
-		deriv[i] = (y[n] - y[p]) / (x[n] - x[p]);
+		/* the edges are a bit special */
+		deriv[0] = deriv[e] =
+			((y[1] - y[e-1]) - (y[0] - y[e])) / ((x[e] - x[e-1]) + (x[1] - x[0]));
 	}
-
-	/* the edges are a bit special */
-	deriv[0] = deriv[e] =
-		((y[1] - y[e-1]) - (y[0] - y[e])) / ((x[e] - x[e-1]) + (x[1] - x[0]));
 }
 float AutoSplineCurve::get_value(float x) {
 	if (this->num_points == 1) return this->y[0];
