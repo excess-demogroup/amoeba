@@ -55,7 +55,7 @@ void end_ml(void *data, const char *el)
 		ml->curr_event = NULL;
 	} catch (FatalException *e) {
 		char buf[256];
-                sprintf(buf, "Error at line %d of demo script: %s", XML_GetCurrentLineNumber(ml->p), e->get_error());
+                sprintf(buf, "Error at line %d of demo script: %s", (int)XML_GetCurrentLineNumber(ml->p), e->get_error());
                 throw new FatalException(buf);
 	}
 }
@@ -92,14 +92,14 @@ void MainLoop::parse(File *demoscript)
 		status = XML_Parse(p, demoscript->get_data(), demoscript->data_length(), 1);
 	} catch (ValueNotSpecifiedException *nve) {
 		char buf[256];
-		sprintf(buf, "Error at line %d of demo script: Parameter `%s=' missing", XML_GetCurrentLineNumber(p), nve->get_error());
+		sprintf(buf, "Error at line %d of demo script: Parameter `%s=' missing", (int)XML_GetCurrentLineNumber(p), nve->get_error());
 		throw new FatalException(buf);
 	}
 		
 	if (!status) {
 		char buf[512];
 		sprintf(buf, "Parse error at line %d of demo script: %s",
-			XML_GetCurrentLineNumber(p),
+			(int)XML_GetCurrentLineNumber(p),
 			XML_ErrorString(XML_GetErrorCode(p)));
 		throw new FatalException(buf);
 	}
