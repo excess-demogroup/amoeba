@@ -5,7 +5,7 @@
 #include <windows.h>
 #endif
 
-#ifdef __linux__
+#ifdef __unix__
 #include <GL/glx.h>
 #include <X11/extensions/xf86vmode.h>
 #include <X11/keysym.h>
@@ -32,7 +32,7 @@ protected:
 	HWND hWnd;
 	HINSTANCE hInstance;
 #endif
-#ifdef __linux__
+#ifdef __unix__
 	Display *dpy;
 	int screen;
 	Window win;

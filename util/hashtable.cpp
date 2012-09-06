@@ -11,7 +11,7 @@
 #include "exception.h"
 #include "demolib_prefs.h"
 
-#ifndef __linux__
+#ifndef __unix__
 #define strcasecmp stricmp
 #endif
 

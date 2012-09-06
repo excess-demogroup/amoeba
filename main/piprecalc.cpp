@@ -13,7 +13,7 @@
 #define PI_STRING "3.14159265358979323846264338327950288"
 
 /* ahem ;-) */
-#ifndef __linux__
+#ifndef __unix__
 #define usleep(x) Sleep(x)
 #endif
 

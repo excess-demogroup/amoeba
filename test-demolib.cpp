@@ -106,7 +106,7 @@ int main(int argc, char **argv)
 		demo->run();
 		delete demo;
 	} catch (Exception *e) {
-#if __linux__
+#if __unix__
 		fprintf(stderr, "Unhandled exception: %s\n", e->get_error());
 #else
                 MessageBox(NULL, e->get_error(), "Unhandled exception!", 0);

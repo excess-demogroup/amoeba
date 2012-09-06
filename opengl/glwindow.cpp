@@ -9,7 +9,7 @@
 #include <windows.h>
 #endif
 
-#ifdef __linux__
+#ifdef __unix__
 #include <unistd.h>
 #include <GL/glx.h>
 #include <X11/extensions/xf86vmode.h>
@@ -56,7 +56,7 @@ void GLWindow::resize(int x, int y, int w, int h)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-#ifdef __linux__
+#ifdef __unix__
 //	XClearWindow(this->dpy, this->win);
 #endif
 }
@@ -92,7 +92,7 @@ GLWindow::GLWindow(char *title, int width, int height, int bpp, bool fullscreen,
 	WindowRect.bottom = (long)height;
 	
 #endif /* WIN32 */	
-#ifdef __linux__
+#ifdef __unix__
 	XVisualInfo *vi;
 	int dpyWidth = 0, dpyHeight = 0;
 	int i;
@@ -113,7 +113,7 @@ GLWindow::GLWindow(char *title, int width, int height, int bpp, bool fullscreen,
 		GLX_STENCIL_SIZE, 4,
 		None
 	};
-#endif /* __linux__ */
+#endif /* __unix__ */
 
 	this->x = 0;
 	this->y = 0;
@@ -140,7 +140,7 @@ GLWindow::GLWindow(char *title, int width, int height, int bpp, bool fullscreen,
 	if( !RegisterClass(&wc) ) throw new FatalException("Couldn't register Window Class");
 
 #endif /* WIN32 */
-#ifdef __linux__
+#ifdef __unix__
 	/* set best mode to current */
 	bestMode = 0;
 
@@ -210,7 +210,7 @@ GLWindow::GLWindow(char *title, int width, int height, int bpp, bool fullscreen,
 	}
 		
 	this->attr.border_pixel = 0;
-#endif /* __linux__ */
+#endif /* __unix__ */
 
 	/* change screen mode */	
 	if (fullscreen) {
@@ -219,13 +219,13 @@ GLWindow::GLWindow(char *title, int width, int height, int bpp, bool fullscreen,
 			throw new FatalException("Couldn't set requested screen mode.");
 		}
 #endif /* WIN32 */
-#ifdef __linux__
+#ifdef __unix__
 		XF86VidModeSwitchToMode(this->dpy, this->screen, modes[bestMode]);
 		XF86VidModeSetViewPort(this->dpy, this->screen, 0, 0);
 		dpyWidth = modes[bestMode]->hdisplay;
 		dpyHeight = modes[bestMode]->vdisplay;
 		XFree(modes);
-#endif /* __linux__ */
+#endif /* __unix__ */
 	}
 
 	/* create the window */
@@ -256,7 +256,7 @@ GLWindow::GLWindow(char *title, int width, int height, int bpp, bool fullscreen,
 		throw new FatalException("Could not change screenmode");
 	}
 #endif
-#ifdef __linux__
+#ifdef __unix__
 	this->attr.background_pixel = 0;
 
 	if (fullscreen) {
@@ -290,7 +290,7 @@ GLWindow::GLWindow(char *title, int width, int height, int bpp, bool fullscreen,
 			title, None, NULL, 0, NULL);
 		XMapRaised(this->dpy, this->win);
 	}
-#endif /* __linux__ */
+#endif /* __unix__ */
 
 #ifdef WIN32
 	static PIXELFORMATDESCRIPTOR pfd = {
@@ -326,7 +326,7 @@ GLWindow::GLWindow(char *title, int width, int height, int bpp, bool fullscreen,
 
 	SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
 #endif /* WIN32	*/
-#ifdef __linux__
+#ifdef __unix__
 	/* connect the glx-context to the window */
 	glXMakeCurrent(this->dpy, this->win, this->ctx);
 	XClearWindow(this->dpy, this->win);
@@ -337,14 +337,14 @@ GLWindow::GLWindow(char *title, int width, int height, int bpp, bool fullscreen,
 	}
 
 	nice(-7);
-#endif /* __linux__ */
+#endif /* __unix__ */
 
 	this->resize(0, 0, this->width, this->height);
 }
 
 GLWindow::~GLWindow()
 {
-#ifdef __linux__
+#ifdef __unix__
 	if (this->ctx) {
 		if (!glXMakeCurrent(this->dpy, None, NULL)) {
 			throw new FatalException("Could not release drawing context.");
@@ -355,7 +355,7 @@ GLWindow::~GLWindow()
 #endif
 
 	if (fullscreen) {
-#ifdef __linux__
+#ifdef __unix__
 		XF86VidModeSwitchToMode(this->dpy, this->screen, &this->deskMode);
 		XF86VidModeSetViewPort(this->dpy, this->screen, 0, 0);
 #endif
@@ -365,7 +365,7 @@ GLWindow::~GLWindow()
 #endif
 	}
 
-#ifdef __linux__
+#ifdef __unix__
 	XCloseDisplay(this->dpy);
 #endif
 
@@ -396,7 +396,7 @@ void GLWindow::flip()
 	}
 	SwapBuffers(this->hDC);
 #endif
-#ifdef __linux__
+#ifdef __unix__
 	glXSwapBuffers(this->dpy, this->win);
 #endif
 }

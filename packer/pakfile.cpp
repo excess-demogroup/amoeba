@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#ifdef __linux__
+#ifdef __unix__
 #include <unistd.h>
 #else
 #include <io.h>
@@ -38,7 +38,7 @@ PakFile::PakFile(char *filename)
 	int err, dirpos, dirsize;
 	unsigned int i;
 
-#if __linux__
+#if __unix__
 	int fd = open("/usr/share/amoeba/demo.dat", O_RDONLY);
 #else
 	int fd = open("demo.dat", O_RDONLY | O_BINARY);

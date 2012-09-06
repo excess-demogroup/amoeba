@@ -18,7 +18,7 @@
 
 #define DEMOLIB_SOUND_PROVIDER OggVorbisAudioProvider
 	
-#if __linux__
+#if __unix__
 #include "audio/linux_oss.h"
 #define DEMOLIB_SOUND_DRIVER OSSAudioDriver
 #else

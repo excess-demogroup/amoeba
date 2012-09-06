@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#ifdef __linux__
+#ifdef __unix__
 #include <X11/keysym.h>
 #endif
 
@@ -56,7 +56,7 @@ void DemoHandler::start_effect()
         glDepthFunc(GL_LESS);
 
 	while (this->active) {
-#ifdef __linux__
+#ifdef __unix__
 		/*
 		 * Linux doesn't use a message queue like Win32, so we'll
 		 * handle X events here :-)

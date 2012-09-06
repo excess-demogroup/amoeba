@@ -12,7 +12,7 @@
 
 #include <GL/gl.h>
 
-#if __linux__
+#if __unix__
 #include <GL/glx.h>
 extern "C" {
 	void (*glXGetProcAddressARB(const GLubyte *procName))();
@@ -52,7 +52,7 @@ bool GLExtensions::has_ext(const char *ext)
 
 void *GLExtensions::func_ptr(const char *function)
 {
-#if __linux__
+#if __unix__
 	void *ptr = (void *)glXGetProcAddressARB((GLubyte *)function);
 #else
 	void *ptr = (void *)wglGetProcAddress(function);
@@ -72,7 +72,7 @@ void *GLExtensions::func_ptr(const char *function)
 	    (strcmp(suffix, "EXT") == 0 || strcmp(suffix, "ARB") == 0)) {
 		char *tmp = strdup(function);
 		tmp[strlen(tmp) - 3] = '\0';
-#if __linux__
+#if __unix__
 		ptr = (void *)glXGetProcAddressARB((GLubyte *)tmp);
 #else
 		ptr = (void *)wglGetProcAddress(tmp);

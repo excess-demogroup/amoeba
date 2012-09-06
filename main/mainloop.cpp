@@ -212,21 +212,21 @@ void MainLoop::process_element(const char *el, const char **attr)
 		int i = 0;
 #if !DEMOLIB_SILENT
 		static bool init_timer = false;
-#if __linux__
+#if __unix__
 		static struct timeval first_lpp, now;
 #else
 		static DWORD first_lpp, now;
 #endif
 		
 		if (!init_timer) {
-#if __linux__
+#if __unix__
 			gettimeofday(&first_lpp, NULL);
 #else
 			first_lpp = GetTickCount();
 #endif
 			init_timer = true;
 		}
-#if __linux__
+#if __unix__
 		gettimeofday(&now, NULL);
 		printf("LPP: [%6.3f]\n",
 			(now.tv_sec - first_lpp.tv_sec) +
@@ -322,7 +322,7 @@ void MainLoop::process_element(const char *el, const char **attr)
 		 * and should be rewritten someday.
 		 */
 		if (this->num_events == 0) {
-#if __linux__
+#if __unix__
 			/* attempt to use the colorful GTK+ interface first =) */
 			try {
 				/* 
