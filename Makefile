@@ -72,7 +72,7 @@ clean:
 ifeq ($(DESTPLATFORM),linux)
 $(EXE): $(SUBLIBS) exception.o test-demolib.o 
 #	$(CXX) $(LDFLAGS) -o test-demolib test-demolib.o exception.o $(SUBLIBS) -lm -lGL -lGLU /usr/lib/libexpat.a /usr/local/lib/tinylib/libpng.a /usr/local/lib/tinylib/libz.a -L/usr/X11R6/lib/ -lXxf86vm -lX11 -lXext /usr/local/lib/tinylib/libjpeg.a /usr/local/lib/tinylib/libfreetype.a /usr/local/lib/tinylib/libvorbisfile.a /usr/local/lib/tinylib/libvorbis.a /usr/local/lib/tinylib/libogg.a $(EXTRALIBS)
-	$(CXX) $(LDFLAGS) -o $(EXE) test-demolib.o exception.o $(SUBLIBS) -lm -lGL -lGLU -lexpat -lpng -lz -L/usr/X11R6/lib/ -lXxf86vm -lX11 -lXext -ljpeg `freetype-config --libs` -lvorbisfile -lvorbis -logg $(EXTRALIBS)
+	$(CXX) $(LDFLAGS) -o $(EXE) test-demolib.o exception.o $(SUBLIBS) -lm -lGL -lGLU -lexpat -lpng -lz -L/usr/X11R6/lib/ -lXxf86vm -lX11 -ljpeg `freetype-config --libs` -lvorbisfile $(EXTRALIBS)
 else
 %.o:  %.rc
 	$(WINDRES) $< $@
