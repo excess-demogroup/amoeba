@@ -127,7 +127,9 @@ void LinuxConfig::show(int *argc, char ***argv, Hashtable *attr_hash)
 	 * (code duplication from glwindow.cpp, not good)
 	 */
 	XF86VidModeModeInfo **modes;
-	Display *dpy = XOpenDisplay(0);
+	Display *dpy = XOpenDisplay(NULL);
+	if (dpy == NULL)
+		throw new FatalException("Can't connect to X server!");
 	int screen = DefaultScreen(dpy);
 	
 	(*_gtk_set_locale) ();

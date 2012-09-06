@@ -145,7 +145,9 @@ GLWindow::GLWindow(char *title, int width, int height, int bpp, bool fullscreen,
 	bestMode = 0;
 
 	/* get a connection */
-	this->dpy = XOpenDisplay(0);
+	this->dpy = XOpenDisplay(NULL);
+	if (dpy == NULL)
+		throw new FatalException("Can't connect to X server!");
 	this->screen = DefaultScreen(this->dpy);
 
 	if (fullscreen) {
