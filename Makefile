@@ -80,3 +80,6 @@ else
 $(EXE): $(SUBLIBS) exception.o test-demolib.o main/win32-config/dialog.o
 	$(CXX) $(CXXFLAGS) -static -o test-demolib.exe test-demolib.o exception.o main/win32-config/dialog.o $(SUBLIBS) -lm -lpng -ljpeg -lz -lopengl32 -lglu32 -lgdi32 -lexpat -lvorbisfile -lvorbis -logg -lfreetype
 endif
+
+install: $(EXE)
+	/usr/bin/install -s $(EXE) $(DESTDIR)/usr/bin/
