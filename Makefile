@@ -23,7 +23,7 @@ ifeq ($(PLATFORM),linux)
     EXTRALIBS=
     #EXTRALIBS=-lefence
     #EXTRALIBS=/usr/src/dmalloc-4.6.0/libdmallocth.a /usr/src/dmalloc-4.6.0/dmallocc.o
-    CPPFLAGS += `freetype-config --cflags` `gtk-config --cflags`
+    CPPFLAGS += $(shell freetype-config --cflags) $(shell gtk-config --cflags)
     ifeq ($(LINUXVARIANT),gcc)
       CC=gcc
       CXX=g++
