@@ -115,7 +115,7 @@ ShadowHandler::ShadowHandler(MainLoop *ml, const char *title, const char *elem, 
 			}
 		}
 	}
-	delete vfcache;
+	delete[] vfcache;
 	
 	this->shadowvol = new GLfloat[evi.num_elems() * 16];
 }
