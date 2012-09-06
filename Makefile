@@ -1,7 +1,7 @@
 include config.mak
 
-CFLAGS=-Wall -O6 -march=pentiumpro -ffast-math -I. -fstrict-aliasing
-CXXFLAGS=-Wall -O6 -march=pentiumpro -ffast-math -I. -fstrict-aliasing -fexceptions
+CFLAGS=-Wall -O2 -ffast-math -fstrict-aliasing -g
+CXXFLAGS=-Wall -O2 -ffast-math -fstrict-aliasing -fexceptions -g
 CPPFLAGS=-I.
 #CFLAGS=-Wall -I. 
 #CXXFLAGS=-Wall -I.
