@@ -28,7 +28,6 @@ PNGImage::PNGImage(File *file)
 //	png_color_16 my_background, *image_background;
 	png_info intent;
 	png_bytep *row_pointers;
-	float screen_gamma;
 	unsigned int row;
 
 	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
@@ -44,7 +43,7 @@ PNGImage::PNGImage(File *file)
 	}
 
 	/* Set up error handling. */
-	if (setjmp(png_ptr->jmpbuf)) {
+	if (setjmp(png_jmpbuf(png_ptr))) {
 		png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
 		throw new FatalException("PNG decompression failed");
 	}
@@ -101,15 +100,10 @@ PNGImage::PNGImage(File *file)
 		png_set_background(png_ptr, &my_background,
 			PNG_BACKGROUND_GAMMA_SCREEN, 0, 1.0); */
 
-	screen_gamma = 2.2;
-	if (png_get_sRGB(png_ptr, info_ptr, (int *)(&intent))) {
-		png_set_sRGB(png_ptr, &intent, 0);
-	} else {
-		double image_gamma;
-		if (png_get_gAMA(png_ptr, info_ptr, &image_gamma))
-			png_set_gamma(png_ptr, screen_gamma, image_gamma);
-		else
-			png_set_gamma(png_ptr, screen_gamma, 0.45455);
+	double screen_gamma = 2.2;
+	double image_gamma;
+	if (png_get_gAMA(png_ptr, info_ptr, &image_gamma)) {
+		png_set_gamma(png_ptr, screen_gamma, image_gamma);
 	}
 
 //	png_set_bgr(png_ptr);
