@@ -15,6 +15,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <errno.h>
+#include <endian.h>
 
 #include "demolib_prefs.h"
 #include "file.h"
@@ -23,7 +24,7 @@
 
 #if DEMOLIB_DATA_PAKFILE
 
-#ifndef __i386__
+#if __BYTE_ORDER != __LITTLE_ENDIAN
 #define fixendianl(x) \
      ((((x) & 0xff000000) >> 24) | (((x) & 0x00ff0000) >>  8) |               \
       (((x) & 0x0000ff00) <<  8) | (((x) & 0x000000ff) << 24))

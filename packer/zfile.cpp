@@ -14,10 +14,11 @@ ZFile::ZFile(File *basefile)
 {
 	z_stream zs;
 
-	char *file_data = basefile->get_data();
+	unsigned char *file_data = (unsigned char *)(basefile->get_data());
 
 	/* read the file length first */
-	this->length = *((unsigned int *)file_data);
+	this->length = file_data[0] | ((int)(file_data[1]) << 8) |
+		((int)(file_data[2]) << 16) | ((int)(file_data[3]) << 24);
 	this->data = (char *)(malloc(this->length));
 
 	if (this->data == NULL) {
