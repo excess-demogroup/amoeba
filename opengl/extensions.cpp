@@ -14,6 +14,9 @@
 
 #if __linux__
 #include <GL/glx.h>
+extern "C" {
+	void (*glXGetProcAddressARB(const GLubyte *procName))();
+}
 #endif
 
 bool GLExtensions::has_ext(const char *ext)
