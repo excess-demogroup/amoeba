@@ -180,6 +180,9 @@ Texture::Texture(Image *img)
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
 	free(pixdata);
+
+	this->width = w;
+	this->height = h;
 }
 
 Texture::~Texture()

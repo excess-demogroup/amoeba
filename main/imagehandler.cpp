@@ -66,18 +66,21 @@ void ImageHandler::draw_scene(float progress)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
+	float w_nudge = 0.5f / (float)tex->get_width();
+	float h_nudge = 0.5f / (float)tex->get_height();
+
         glBegin(GL_QUADS);
 
-        glTexCoord2f(0.0f, 0.0f);
+        glTexCoord2f(w_nudge, h_nudge);
         glVertex3f(xpos, ypos, 0.0f);
 
-        glTexCoord2f(0.0f, 1.0f);
+        glTexCoord2f(w_nudge, 1.0f - h_nudge);
         glVertex3f(xpos, ypos + ysize, 0.0f);
 
-        glTexCoord2f(1.0f, 1.0f);
+        glTexCoord2f(1.0f - w_nudge, 1.0f - h_nudge);
         glVertex3f(xpos + xsize, ypos + ysize, 0.0f);
 
-        glTexCoord2f(1.0f, 0.0f);
+        glTexCoord2f(1.0f - w_nudge, h_nudge);
         glVertex3f(xpos + xsize, ypos, 0.0f);
 
         glEnd();

@@ -206,22 +206,17 @@ void BackgroundHandler::draw_scene(float progress)
 				for (int k = 0; k < xpartbits[xbit]; k++) {
 					glBindTexture(GL_TEXTURE_2D, this->textures[texnum++]);
 	
-					/*
-					 * the +0.01 part is to fix some cracks on broken
-					 * (e.g. Matrox G450/G550 -- ATI Rage128 has the
-					 * same problem but this fix doesn't help) OpenGL
-					 * drivers -- hopefully it shouldn't matter for
-					 * properly behaving drivers :-)
-					 */
-			
+					float w_nudge = 0.5f / (float)w;
+					float h_nudge = 0.5f / (float)h;
+
 		       			glBegin(GL_QUADS);
-					glTexCoord2f(0.0f, 0.0f);
+					glTexCoord2f(w_nudge, h_nudge);
 					glVertex3f((float)(xoffs    ), (float)(yoffs    ), 0.0f);
-					glTexCoord2f(0.0f, 1.0f);
+					glTexCoord2f(w_nudge, 1.0f - h_nudge);
 					glVertex3f((float)(xoffs    ), (float)(yoffs + h) + 0.01f, 0.0f);
-					glTexCoord2f(1.0f, 1.0f);
+					glTexCoord2f(1.0f - w_nudge, 1.0f - h_nudge);
 					glVertex3f((float)(xoffs + w) + 0.01f, (float)(yoffs + h) + 0.01f, 0.0f);
-					glTexCoord2f(1.0f, 0.0f);
+					glTexCoord2f(1.0f - w_nudge, h_nudge);
 					glVertex3f((float)(xoffs + w) + 0.01f, (float)(yoffs    ), 0.0f);
 					glEnd();
 			
