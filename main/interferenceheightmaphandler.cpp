@@ -98,7 +98,7 @@ void InterferenceHeightmapHandler::draw_scene(float progress)
 			 * it's for the sake of speed :-)
 			 */
 			const float dist = hypot(xf, yf);
-#if __GNUC__
+#if __GNUC__ && defined(__i386__)
 			float sin_v, cos_v;
 			__asm__("fsincos" : "=t" (cos_v), "=u" (sin_v) :
 				"0" (dist * freqcirc + progress * speedcirc));

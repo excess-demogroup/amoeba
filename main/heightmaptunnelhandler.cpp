@@ -105,7 +105,7 @@ void HeightmapTunnelHandler::draw_scene(float progress)
 		for (int y = 0; y < ylod; y++, yf += yscale, yfs += yscale2) {
 			/* copied more or less directly from interferenceheightmaphandler.cpp :-) */
 			const float dist = hypot(xwrap, yf);
-#if __GNUC__
+#if __GNUC__ && defined(__i386__)
 			float sin_v, cos_v;
 			__asm__("fsincos" : "=t" (cos_v), "=u" (sin_v) :
 				"0" (dist * freqcirc + progress * speedcirc));
