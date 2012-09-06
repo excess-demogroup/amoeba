@@ -24,10 +24,9 @@ Image *load_image(const char * const filename)
 	 * a syntax of "image:alpha" indicates that the image data and the alpha data
 	 * is in separate files
 	 */
-	char *ptr = strchr(filename, ':');
-	if (ptr != NULL) {
+	if (strchr(filename, ':') != NULL) {
 		char *fn = strdup(filename);
-		ptr = strchr(fn, ':');
+		char *ptr = strchr(fn, ':');
 		ptr[0] = 0;
 		
 		Image *rgb = load_image(fn);
