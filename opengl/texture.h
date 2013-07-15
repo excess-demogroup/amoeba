@@ -12,15 +12,12 @@ public:
 	Texture(Image *img);
 	~Texture();
 
-	int get_width() { return width; }
-	int get_height() { return height; }
 	void bind();
 
 	/* ick :-) */
 	int refcount;
 	
 protected:
-	int width, height;
 	GLuint texnum;
 
 	void add_mipmap(GLenum ifmt, GLenum fmt, int bpp, int w, int h,
