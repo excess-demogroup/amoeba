@@ -1,7 +1,7 @@
 include config.mak
 
-CFLAGS=-Wall -O2 -ffast-math -fstrict-aliasing -g
-CXXFLAGS=-Wall -O2 -ffast-math -fstrict-aliasing -fexceptions -g
+CFLAGS=-Wall -ffast-math -fstrict-aliasing -g
+CXXFLAGS=-Wall -ffast-math -fstrict-aliasing -fexceptions -g
 CPPFLAGS=-I.
 #CFLAGS=-Wall -I. 
 #CXXFLAGS=-Wall -I.
@@ -9,14 +9,15 @@ LDFLAGS=
 
 ifeq ($(PLATFORM),linux)
   ifeq ($(DESTPLATFORM),win32)
-    CC=i586-mingw32msvc-gcc
-    CXX=i586-mingw32msvc-g++
-    AR=i586-mingw32msvc-ar
-    RANLIB=i586-mingw32msvc-ranlib
-    WINDRES=i586-mingw32msvc-windres
+    PREFIX=i686-w64-mingw32-
+    CC=$(PREFIX)gcc
+    CXX=$(PREFIX)g++
+    AR=$(PREFIX)ar
+    RANLIB=$(PREFIX)ranlib
+    WINDRES=$(PREFIX)windres
     CFLAGS += -mwindows
     CXXFLAGS += -mwindows
-    CPPFLAGS += -I/usr/i586-mingw32msvc/include/freetype
+    CPPFLAGS += -I/usr/$(PREFIX)/include/freetype
   else
     AR=ar
     RANLIB=ranlib

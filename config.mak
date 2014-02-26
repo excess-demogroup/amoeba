@@ -12,6 +12,7 @@
 # WIN32VARIANT=cygwin for Cygwin (ie. for AIDC use primarily)
 #
 PLATFORM=linux
-DESTPLATFORM=linux
+#DESTPLATFORM=linux
+DESTPLATFORM=win32
 LINUXVARIANT=gcc
 WIN32VARIANT=mingw

@@ -154,7 +154,28 @@ GLWindow::GLWindow(char *title, int width, int height, int bpp, bool fullscreen,
 		XF86VidModeGetAllModeLines(this->dpy, this->screen, &modeNum, &modes);
 
 		/* save desktop-resolution before switching modes */
+
+#if 1
 		this->deskMode = *modes[0];
+#else
+		XF86VidModeModeLine temp;
+		int dotclock;
+
+		XF86VidModeGetModeLine(this->dpy, this->screen, &dotclock, &temp);
+		this->deskMode.dotclock = dotclock;
+		this->deskMode.hdisplay = temp.hdisplay;
+		this->deskMode.hsyncstart = temp.hsyncstart;
+		this->deskMode.hsyncend = temp.hsyncend;
+		this->deskMode.htotal = temp.htotal;
+		this->deskMode.hskew = temp.hskew;
+		this->deskMode.vdisplay = temp.vdisplay;
+		this->deskMode.vsyncstart = temp.vsyncstart;
+		this->deskMode.vsyncend = temp.vsyncend;
+		this->deskMode.vtotal = temp.vtotal;
+		this->deskMode.flags = temp.flags;
+		this->deskMode.privsize = temp.privsize;
+		this->deskMode.c_private = temp.c_private;
+#endif
 
 		/* look for mode with requested resolution */
 		for (i = 0; i < modeNum; i++) {
@@ -224,7 +245,7 @@ GLWindow::GLWindow(char *title, int width, int height, int bpp, bool fullscreen,
 		XF86VidModeSetViewPort(this->dpy, this->screen, 0, 0);
 		dpyWidth = modes[bestMode]->hdisplay;
 		dpyHeight = modes[bestMode]->vdisplay;
-		XFree(modes);
+/*		XFree(modes); */
 #endif /* __unix__ */
 	}
 
